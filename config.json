@@ -1,0 +1,13 @@
+{
+  "appBasePath": "/jukebox",
+  "tracksDirectory": "C:\\Users\\AlexTsang\\Music",
+  "tls": {
+    "isEnabled": false,
+    "certificate": "certificates/server.crt",
+    "key": "certificates/server.key"
+  },
+  "httpPortInUrl": 18080,
+  "httpsPortInUrl": 18443,
+  "httpPort": 18080,
+  "httpsPort": 18443
+}
