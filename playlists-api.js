@@ -4,6 +4,7 @@
  * References:
  * http://en.wikipedia.org/wiki/PLS_(file_format)
  * http://schworak.com/blog/e41/extended-pls-plsv2/
+ * https://msdn.microsoft.com/en-us/library/dd564668(v=vs.85).aspx
  *
  * @author alextsang@live.com
  */
