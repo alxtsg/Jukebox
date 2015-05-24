@@ -37,11 +37,13 @@
       var token = request.query.token;
       if(token === undefined){
         response.statusCode = 403;
+        response.type('text/plain');
         response.end('MISSING_TOKEN');
         return;
       }
       if(!authenticationUtil.isTokenValid(token)){
         response.statusCode = 403;
+        response.type('text/plain');
         response.end('INVALID_TOKEN');
         return;
       }

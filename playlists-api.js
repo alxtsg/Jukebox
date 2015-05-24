@@ -4,6 +4,7 @@
  * References:
  * http://en.wikipedia.org/wiki/PLS_(file_format)
  * http://schworak.com/blog/e41/extended-pls-plsv2/
+ * http://en.wikipedia.org/wiki/Advanced_Stream_Redirector
  * https://msdn.microsoft.com/en-us/library/dd564668(v=vs.85).aspx
  *
  * @author alextsang@live.com
@@ -68,10 +69,12 @@ module.exports = (function(){
           console.error('Unable to get read tracks directory.');
           console.error(error);
           response.statusCode = 500;
+          response.type('text/plain');
           response.end('INTERNAL_ERROR');
           return;
         }
         response.statusCode = 200;
+        response.type('audio/x-scpls');
         response.write('[playlist]');
         response.write('\n');
         if(request.protocol === 'http'){
@@ -131,10 +134,12 @@ module.exports = (function(){
           console.error('Unable to get read tracks directory.');
           console.error(error);
           response.statusCode = 500;
+          response.type('text/plain');
           response.end('INTERNAL_ERROR');
           return;
         }
         response.statusCode = 200;
+        response.type('video/x-ms-asf');
         if(request.protocol === 'http'){
           if(request.app.locals.httpPortInUrl !== null){
             port = request.app.locals.httpPortInUrl;
@@ -144,7 +149,7 @@ module.exports = (function(){
             port = request.app.locals.httpsPortInUrl;
           }
         }
-        files.forEach(function(file, fileIndex){
+        files.forEach(function(file){
           var url = buildTrackUrl({
               protocol: request.protocol,
               hostname: request.hostname,
