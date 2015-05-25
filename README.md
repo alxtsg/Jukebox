@@ -53,10 +53,10 @@ The music playlist in PLS format can be obtained at:
 
 Assuming Jukebox is running behind a reverse proxy located at example.com and you want to access Jukebox over HTTPS:
 
-* Set `appBasePath` to `/jukebox`.
+* Set `appBasePath` to `"/jukebox"`.
 * Set `isEnabled` in `tls` to `true`.
 * Set `certificate` and `key` in `tls` to the path of public certificate file and private key file respectively. Self-signed TLS certificate is accepted.
-* Set `httpsPortInUrl` to null, because the URLs of music files should not contain port number as the port number is used between your reverse proxy and Jukebox only.
+* Set `httpsPortInUrl` to `null`, because the URLs of music files should not contain port number as the port number is used between your reverse proxy and Jukebox only.
 * Set `httpsPort` to a port number which Jukebox listens for HTTPS traffic, such as `8443`.
 * Configure your reverse proxy to redirect HTTPS traffic to Jukebox if URL begins with `/jukebox`.
 
