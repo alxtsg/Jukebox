@@ -13,7 +13,7 @@ A simple Node.js application for serving music playlists and music files. Jukebo
 ## Installation ##
 
 0. Install Node.js.
-1. Install dependencies (express and xml).
+1. Install dependencies by `npm install express` and `npm install xml`.
 2. Start the application by `node index.js`.
 
 ## Usage ##
