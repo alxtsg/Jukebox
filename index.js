@@ -53,7 +53,7 @@
   /**
    * Reads configuration file.
    */
-   readConfig = function(){
+  readConfig = function(){
     fs.readFile(
       'config.json',
       {

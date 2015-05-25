@@ -10,7 +10,7 @@ module.exports = (function(){
   /**
    * Generates authentication token.
    *
-   * @return An authentication token.
+   * @return {String} An authentication token.
    */
   var generateToken = function(){
       return 'secret-token';
