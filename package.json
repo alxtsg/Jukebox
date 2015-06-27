@@ -1,0 +1,25 @@
+{
+  "name": "jukebox",
+  "version": "1.0.0",
+  "description": "A simple Node.js application for serving music playlists and music files.",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.13.0",
+    "xml": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/alxtsg/jukebox.git"
+  },
+  "keywords": [
+    "jukebox",
+    "music"
+  ],
+  "author": "alextsang@live.com",
+  "license": "BSD-3-Clause",
+  "homepage": "https://bitbucket.org/alxtsg/jukebox#readme"
+}
