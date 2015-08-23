@@ -4,7 +4,7 @@
   "description": "A simple Node.js application for serving music playlists and music files.",
   "main": "index.js",
   "dependencies": {
-    "express": "^4.13.0",
+    "express": "^4.13.3",
     "xml": "^1.0.0"
   },
   "devDependencies": {},
