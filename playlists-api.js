@@ -9,7 +9,7 @@
  *
  * @author alextsang@live.com
  */
-module.exports = (function(){
+module.exports = (function () {
 
   'use strict';
 
@@ -37,11 +37,11 @@ module.exports = (function(){
      *
      * @return {String} Track URL.
      */
-    buildTrackUrl = function(components){
+    buildTrackUrl = function (components) {
       var url = components.protocol
         .concat('://')
         .concat(components.hostname);
-      if(components.port !== null){
+      if (components.port !== null) {
         url = url
           .concat(':')
           .concat(components.port);
@@ -60,12 +60,12 @@ module.exports = (function(){
      * @param {Object} request HTTP request.
      * @param {Object} response HTTP response.
      */
-    getPlaylistAsPLS = function(request, response){
+    getPlaylistAsPLS = function (request, response) {
       var port = null,
         tracksDirectory = request.app.locals.tracksDirectory,
         token = authenticationUtil.generateToken();
-      fs.readdir(tracksDirectory, function(error, files){
-        if(error !== null){
+      fs.readdir(tracksDirectory, function (error, files) {
+        if (error !== null) {
           console.error('Unable to get read tracks directory.');
           console.error(error);
           response.statusCode = 500;
@@ -77,16 +77,16 @@ module.exports = (function(){
         response.type('audio/x-scpls');
         response.write('[playlist]');
         response.write('\n');
-        if(request.protocol === 'http'){
-          if(request.app.locals.httpPortInUrl !== null){
+        if (request.protocol === 'http') {
+          if (request.app.locals.httpPortInUrl !== null) {
             port = request.app.locals.httpPortInUrl;
           }
-        }else if(request.protocol === 'https'){
-          if(request.app.locals.httpsPortInUrl !== null){
+        } else if (request.protocol === 'https') {
+          if (request.app.locals.httpsPortInUrl !== null) {
             port = request.app.locals.httpsPortInUrl;
           }
         }
-        files.forEach(function(file, fileIndex){
+        files.forEach(function (file, fileIndex) {
           var index = fileIndex + 1;
           response.write('File' + index + '=' + buildTrackUrl({
             protocol: request.protocol,
@@ -113,7 +113,7 @@ module.exports = (function(){
      * @param {Object} request HTTP request.
      * @param {Object} response HTTP response.
      */
-    getPlaylistAsASX = function(request, response){
+    getPlaylistAsASX = function (request, response) {
       var port = null,
         tracksDirectory = request.app.locals.tracksDirectory,
         token = authenticationUtil.generateToken(),
@@ -129,8 +129,8 @@ module.exports = (function(){
             }
           ]
         };
-      fs.readdir(tracksDirectory, function(error, files){
-        if(error !== null){
+      fs.readdir(tracksDirectory, function (error, files) {
+        if (error !== null) {
           console.error('Unable to get read tracks directory.');
           console.error(error);
           response.statusCode = 500;
@@ -140,16 +140,16 @@ module.exports = (function(){
         }
         response.statusCode = 200;
         response.type('video/x-ms-asf');
-        if(request.protocol === 'http'){
-          if(request.app.locals.httpPortInUrl !== null){
+        if (request.protocol === 'http') {
+          if (request.app.locals.httpPortInUrl !== null) {
             port = request.app.locals.httpPortInUrl;
           }
-        }else if(request.protocol === 'https'){
-          if(request.app.locals.httpsPortInUrl !== null){
+        } else if (request.protocol === 'https') {
+          if (request.app.locals.httpsPortInUrl !== null) {
             port = request.app.locals.httpsPortInUrl;
           }
         }
-        files.forEach(function(file){
+        files.forEach(function (file) {
           var url = buildTrackUrl({
               protocol: request.protocol,
               hostname: request.hostname,

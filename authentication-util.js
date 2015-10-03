@@ -3,7 +3,7 @@
  *
  * @author alextsang@live.com
  */
-module.exports = (function(){
+module.exports = (function () {
 
   'use strict';
 
@@ -12,7 +12,7 @@ module.exports = (function(){
    *
    * @return {String} An authentication token.
    */
-  var generateToken = function(){
+  var generateToken = function () {
       return 'secret-token';
     },
 
@@ -23,7 +23,7 @@ module.exports = (function(){
      *
      * @return {Boolean} true if the given token is valid, false otherwise.
      */
-    isTokenValid = function(token){
+    isTokenValid = function (token) {
       var currentToken = generateToken();
       return (currentToken === token);
     };
