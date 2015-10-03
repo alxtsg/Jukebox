@@ -16,7 +16,6 @@ module.exports = (function () {
     fs = require('fs'),
 
     express = require('express'),
-    xml = require('xml'),
 
     router = express.Router(),
 
