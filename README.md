@@ -6,9 +6,8 @@ A simple Node.js application for serving music playlists and music files. Jukebo
 
 ## Requirements ##
 
-* Node.js (tested with 0.10.35).
-* express (tested with 4.13.3).
-* xml (tested with 1.0.0).
+* Node.js (`>=0.10.35`).
+* express (`>=4.13.3`).
 
 ## Installation ##
 
@@ -34,7 +33,6 @@ The configuration file `config.json` controls the following:
 Jukebox supports generating playlists in the following formats:
 
 * [PLS](http://en.wikipedia.org/wiki/PLS_(file_format)): Recognized by many software, such as VLC media player.
-* [ASX](http://en.wikipedia.org/wiki/Advanced_Stream_Redirector): Recognized by Windows Media Player.
 
 The generated music playlist contains all music tracks found in the directory as specified in `tracksDirectory`.
 
@@ -60,15 +58,15 @@ Assuming Jukebox is running behind a reverse proxy located at example.com and yo
 * Set `httpsPort` to a port number which Jukebox listens for HTTPS traffic, such as `8443`.
 * Configure your reverse proxy to redirect HTTPS traffic to Jukebox if URL begins with `/jukebox`.
 
-The music playlist in ASX format can be obtained at:
+The music playlist in PLS format can be obtained at:
 
-[https://example.com/jukebox/playlists/music.asx?token=secret-token](https://example.com/jukebox/playlists/music.asx?token=secret-token)
+[https://example.com/jukebox/playlists/music.pls?token=secret-token](https://example.com/jukebox/playlists/music.pls?token=secret-token)
 
 You can put the URL of music playlist in media players such as VLC media player or Windows Media Player, then the music playback should begin.
 
 ## Known issues ##
 
-* When opening the playlist (in ASX format) in Windows Media Player, Unicode characters in track names cannot be displayed properly in the software, but music playback is fine.
+* (None)
 
 ## TODO ##
 
