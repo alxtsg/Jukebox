@@ -9,6 +9,7 @@
 
   var authenticationUtil = require('./authentication-util.js'),
     playlistsApi = require('./playlists-api.js'),
+    tracksApi = require('./tracks-api.js'),
 
     fs = require('fs'),
     http = require('http'),
@@ -22,6 +23,7 @@
 
     readConfig = null,
     readTlsOptions = null,
+    prepareTracksMap = null,
     startServer = null,
 
     /**
@@ -87,7 +89,7 @@
         if (app.locals.isTlsEnabled) {
           readTlsOptions(app.locals.tlsCertificatePath, app.locals.tlsKeyPath);
         } else {
-          startServer();
+          prepareTracksMap();
         }
       });
   };
@@ -103,7 +105,7 @@
       if (error !== null) {
         console.error('Unable to read TLS certificate.');
         console.error(error);
-        process.exit(-1);
+        process.exit(1);
       }
       tlsOptions.cert = tlsCertificateContent;
       fs.readFile(tlsKeyPath, function (error, tlsKeyContent) {
@@ -112,8 +114,28 @@
           console.error(error);
         }
         tlsOptions.key = tlsKeyContent;
-        startServer();
+        prepareTracksMap();
       });
+    });
+  };
+
+  /**
+   * Prepares tracks map for generating playlists.
+   */
+  prepareTracksMap = function () {
+    fs.readdir(app.locals.tracksDirectory, function (readdirError, files) {
+      var tracksMap = null;
+      if (readdirError !== null) {
+        console.error('Unable to get the list of tracks.');
+        console.error(readdirError);
+        process.exit(1);
+      }
+      tracksMap = {};
+      files.forEach(function (file, index) {
+        tracksMap[index] = file;
+      });
+      app.locals.tracksMap = tracksMap;
+      startServer();
     });
   };
 
@@ -126,13 +148,9 @@
     app.disable('x-powered-by');
     // Authenticate all incoming requests.
     app.use(authenticateRequest);
-    // Mount APIs. Requests for tracks will be handled by Express built-in
-    // middleware which serves static files.
+    // Mount APIs.
     app.use(app.locals.appBasePath + '/playlists', playlistsApi);
-    app.use(app.locals.appBasePath + '/tracks', express.static(
-      app.locals.tracksDirectory, {
-      etag: false
-    }));
+    app.use(app.locals.appBasePath + '/tracks', tracksApi);
     http.createServer(app).listen(app.locals.httpPort);
     if (app.locals.isTlsEnabled) {
       https.createServer(tlsOptions, app).listen(app.locals.httpsPort);

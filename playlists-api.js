@@ -13,8 +13,6 @@ module.exports = (function () {
 
   var authenticationUtil = require('./authentication-util.js'),
 
-    fs = require('fs'),
-
     express = require('express'),
 
     router = express.Router(),
@@ -28,8 +26,7 @@ module.exports = (function () {
      *                            port - Port number of server. Set to null to
      *                            	disable including port number in URL.
      *                            appBasePath - Application URL base path.
-     *                            trackName - Track name, including file
-     *                            	extension.
+     *                            trackIndex - Track index.
      *                            token - Authentication token.
      *
      * @return {String} Track URL.
@@ -45,7 +42,7 @@ module.exports = (function () {
       }
       url = url.concat(components.appBasePath)
         .concat('/tracks/')
-        .concat(encodeURIComponent(components.trackName))
+        .concat(components.trackIndex)
         .concat('?token=')
         .concat(components.token);
       return url;
@@ -59,49 +56,39 @@ module.exports = (function () {
      */
     getPlaylistAsPLS = function (request, response) {
       var port = null,
-        tracksDirectory = request.app.locals.tracksDirectory,
+        trackIndices = Object.keys(request.app.locals.tracksMap),
         token = authenticationUtil.generateToken();
-      fs.readdir(tracksDirectory, function (error, files) {
-        if (error !== null) {
-          console.error('Unable to get read tracks directory.');
-          console.error(error);
-          response.statusCode = 500;
-          response.type('text/plain');
-          response.end('INTERNAL_ERROR');
-          return;
+      response.statusCode = 200;
+      response.type('audio/x-scpls');
+      response.write('[playlist]');
+      response.write('\n');
+      if (request.protocol === 'http') {
+        if (request.app.locals.httpPortInUrl !== null) {
+          port = request.app.locals.httpPortInUrl;
         }
-        response.statusCode = 200;
-        response.type('audio/x-scpls');
-        response.write('[playlist]');
-        response.write('\n');
-        if (request.protocol === 'http') {
-          if (request.app.locals.httpPortInUrl !== null) {
-            port = request.app.locals.httpPortInUrl;
-          }
-        } else if (request.protocol === 'https') {
-          if (request.app.locals.httpsPortInUrl !== null) {
-            port = request.app.locals.httpsPortInUrl;
-          }
+      } else if (request.protocol === 'https') {
+        if (request.app.locals.httpsPortInUrl !== null) {
+          port = request.app.locals.httpsPortInUrl;
         }
-        files.forEach(function (file, fileIndex) {
-          var index = fileIndex + 1;
-          response.write('File' + index + '=' + buildTrackUrl({
-            protocol: request.protocol,
-            hostname: request.hostname,
-            port: port,
-            appBasePath: request.app.locals.appBasePath,
-            trackName: file,
-            token: token
-          }));
-          response.write('\n');
-          response.write('Title' + index + '=' + file);
-          response.write('\n');
-        });
-        response.write('NumberOfEntries=' + files.length);
+      }
+      trackIndices.forEach(function (trackIndex, index) {
+        var trackName = request.app.locals.tracksMap[trackIndex];
+        response.write('File' + (index + 1) + '=' + buildTrackUrl({
+          protocol: request.protocol,
+          hostname: request.hostname,
+          port: port,
+          appBasePath: request.app.locals.appBasePath,
+          trackIndex: trackIndex,
+          token: token
+        }));
         response.write('\n');
-        response.write('Version=2');
-        response.end();
+        response.write('Title' + (index + 1) + '=' + trackName);
+        response.write('\n');
       });
+      response.write('NumberOfEntries=' + trackIndices.length);
+      response.write('\n');
+      response.write('Version=2');
+      response.end();
     };
 
   router.get('/music.pls', getPlaylistAsPLS);
