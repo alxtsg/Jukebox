@@ -18,6 +18,27 @@ module.exports = (function () {
     router = express.Router(),
 
     /**
+     * Shuffles an array.
+     *
+     * @param {Array} array An array of elements.
+     *
+     * @return {Array} An array with its elements shuffled.
+     */
+    shuffle = function (array) {
+      var counter = array.length - 1,
+        swapIndex = null,
+        tempValue = null;
+      while (counter > 0) {
+        swapIndex = Math.floor(Math.random() * counter);
+        tempValue = array[counter];
+        array[counter] = array[swapIndex];
+        array[swapIndex] = tempValue;
+        counter -= 1;
+      }
+      return array;
+    },
+
+    /**
      * Builds track URL.
      *
      * @param {Object} components An object with the following properties:
@@ -70,6 +91,10 @@ module.exports = (function () {
         if (request.app.locals.httpsPortInUrl !== null) {
           port = request.app.locals.httpsPortInUrl;
         }
+      }
+      // Shuffle the tracks if requested by client.
+      if (request.query.shuffle === 'true') {
+        trackIndices = shuffle(trackIndices);
       }
       trackIndices.forEach(function (trackIndex, index) {
         var trackName = request.app.locals.tracksMap[trackIndex];
